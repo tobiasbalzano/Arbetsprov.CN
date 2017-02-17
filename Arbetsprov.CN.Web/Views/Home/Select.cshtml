@@ -249,15 +249,19 @@
 
         function removeTrack(track) {
             vm.Seeds = vm.Seeds - 1;
-            var trackIndex = vm.SelectedTracks.findIndex(function (a) { return a.Id == track.Id });
-            vm.SelectedTracks.pop(trackIndex);
+            var trackIndex = vm.SelectedTracks.findIndex(function (a) {
+                return a.Id === track.Id;
+            });
+            vm.SelectedTracks.splice(trackIndex, 1);
         }
 
 
         function removeArtist(artist) {
             vm.Seeds = vm.Seeds - 1;
-            var artistIndex = vm.SelectedArtists.findIndex(function (a) { return a.Id == artist.Id });
-            vm.SelectedArtists.pop();
+            var artistIndex = vm.SelectedArtists.findIndex(function (a) {
+                return a.Id == artist.Id;
+            });
+            vm.SelectedArtists.splice(artistIndex, 1);
         }
 
         function showModal(text) {
