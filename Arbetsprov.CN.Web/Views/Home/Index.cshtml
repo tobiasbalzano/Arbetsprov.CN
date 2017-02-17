@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Music Recommendations";
+}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-5 jumbotron" style="max-height: 220px;">
+        <img src="~/Images/Branding/Spotify_Logo_RGB_Green.png" class="img-responsive" />
+        <h3 class="text-center">Music recommendation engine</h3>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-5" style="max-height: 220px;">
+        <div class="col-md-12">
+            <p>
+                Select a main category, thematic playlist and get a collection of artists and tracks to use as influences in the engine
+            </p>
+        </div>
+        <h3 class="text-center">@Html.ActionLink("Get Recommendations", "Select", "Home")</h3>
+    </div>
+    <div class="col-md-3"></div>
+</div>

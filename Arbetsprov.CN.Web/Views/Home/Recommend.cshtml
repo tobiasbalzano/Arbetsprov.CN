@@ -1,0 +1,35 @@
+﻿@model Arbetsprov.CN.Web.ViewModels.Home.RecommendationViewModel
+
+@{
+    ViewBag.Title = "Recommend";
+}
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-5 jumbotron" style="max-height: 220px;">
+        <img src="~/Images/Branding/Spotify_Logo_RGB_Green.png" class="img-responsive" />
+        <h3 class="text-center">The engine recommends:</h3>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+
+
+<div class="row">
+
+    @foreach (var item in Model.Tracks)
+    {
+        <a href="@Html.Raw(item.Uri)">
+            <div class="col-md-4 recommendation">
+                <div class="">
+                    <div class="col-md-3">
+                        <img src="@Html.Raw(item.Album.Images[0].Url)" class="img-responsive" />
+                    </div>
+                    <div class="col-md-9 " style="display: inline">
+                        <p style="display: inline">@Html.Raw(string.Join(", ", item.Artists.ToList().ConvertAll(a => a.Name)))</p>
+                        <p style="display: inline">-</p> <p>@Html.Raw(item.Name)</p>
+                    </div>
+                </div>
+            </div>
+        </a>
+    }
+</div>

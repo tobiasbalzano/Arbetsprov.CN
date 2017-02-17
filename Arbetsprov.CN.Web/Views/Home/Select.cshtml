@@ -1,0 +1,369 @@
+﻿@{
+    ViewBag.Title = "Music Recommendations";
+}
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-5 jumbotron deflate" style="max-height: 220px;">
+        <img src="~/Images/Branding/Spotify_Logo_RGB_Green.png" class="img-responsive" />
+        <h3 class="text-center">Music recommendation engine</h3>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+<div id="app">
+    <modal v-if="ShowModal" :Text="InfoText"></modal>
+    <div class="row">
+        <div class="form-group" v-if="ShowCategories">
+            <label class="control-label col-md-2">Select Category</label>
+            <div class="col-md-8 playlistSelection">
+                <categorylist v-if="ShowCategories" :Array="Categories"></categorylist>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group" v-if="ShowPlaylists">
+            <label class="control-label col-md-2">Browse Playlist</label>
+            <div class="col-md-8 playlistSelection">
+                <playlistlist v-if="ShowPlaylists" :Array="Playlists"></playlistlist>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group" v-if="ShowTracks">
+            <label class="control-label col-md-2">Select influences</label>
+            <div class="col-md-8 playlistSelection">
+                <trackslist v-if="ShowTracks" :Array="Tracks"></trackslist>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="form-group">
+            <label class="control-label col-md-2">Influencing Artists</label>
+            <div class="col-md-8">
+                <ul>
+                    <li v-for="artist in SelectedArtists">
+                        <div class="col-md-3 influencer"><p class="track" v-on:click="RemoveArtist(artist)">{{artist.Name}}</p></div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <label class="control-label col-md-2">Influencing Tracks</label>
+            <div class="col-md-10">
+                <ul>
+                    <li v-for="track in SelectedTracks">
+                        <div class="col-md-3 influencer"><p class="track" v-on:click="RemoveTrack(track)">{{track.Name}}</p></div>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="form-group">
+            <label class="control-label col-md-5"></label>
+            <div class="col-md-2">
+                <input type="submit" name="recommend" value="Recommend songs" class="btn btn-group-lg" v-on:click="Recommend()" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="~/Scripts/vue.min.js"></script>
+
+    <script type="x/template" id="CategoryList">
+        <div class="dropdown">
+            <ul class="">
+                <li v-for="(item, index) in Array" v-on:click="GetPlaylists(item.Id, index)">
+                    <div id="item.Id" class="row">
+                        <div class="col-md-1 art">
+                            <img v-bind:src="item.Images[0].Url" alt="item.Name" class="img-responsive" />
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{item.Name}}</h4>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </script>
+
+    <script type="x/template" id="PlaylistList">
+        <div class="dropdown">
+            <ul class="">
+                <li v-for="(item, index) item in Array" v-on:click="GetTracksForPlaylist(item.Tracks.Href, index)">
+                    <div id="item.Id" class="row">
+                        <div class="col-md-1 art">
+                            <img v-bind:src="item.Images[0].Url" alt="item.Album.Name" class="img-responsive" />
+                        </div>
+                        <div class="col-md-8">
+                            <h4>{{item.Name}}</h4>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </script>
+
+    <script type="x/template" id="TracksList">
+        <div class="dropdown">
+            <ul class="">
+                <li v-for="item in Array">
+                    <div id="item.Id" class="row">
+                        <div class="col-md-1 art">
+                            <img v-bind:src="item.Album.Images[0].Url" alt="item.Name" class="img-responsive" />
+                        </div>
+                        <div class="col-md-8 tracklist ">
+                            <p class="inline track" v-for="(artist, index) in item.Artists" v-on:click="AddArtist(artist)">{{artist.Name}} </p><p class="inline"> - </p> <p class="track" v-on:click="AddTrack(item)">  {{item.Name}}</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </script>
+
+    <script type="x/template" id="Modal">
+        <transition name="modal">
+            <div class="modal-mask" v-on:click="Close">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
+
+                        <div class="modal-body">
+                            {{Text}}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </script>
+
+    <script type="text/javascript">
+        function recommend() {
+            if (vm.Seeds > 0) {
+
+                var form = $('<form></form>');
+
+                form.attr("method", "post");
+                form.attr("action", "/Home/Recommend");
+
+                var field1 = $('<input></input>');
+
+                field1.attr("type", "hidden");
+                field1.attr("name", "artists");
+                field1.attr("id", "artists");
+                field1.attr("value", JSON.stringify(vm.SelectedArtists));
+                var field2 = $('<input></input>');
+
+                field2.attr("type", "hidden");
+                field2.attr("name", "tracks");
+                field2.attr("id", "tracks");
+                field2.attr("value", JSON.stringify(vm.SelectedTracks));
+
+                form.append(field1);
+                form.append(field2);
+                $(document.body).append(form);
+                form.submit();
+            } else {
+                showModal("Needs 1 minumum influencer");
+            }
+        }
+
+        function getCategories() {
+            $.ajax({
+                url: "http://localhost:49411/Home/GetCategories",
+                type: 'GET',
+                dataType: 'json',
+                error: function (xhr) {
+                    alert(xhr.statusText);
+                },
+                success: function (result) {
+                    vm.Categories = result;
+                }
+            });
+        };
+
+        function getTracksForPlaylist(trackurl, index) {
+            vm.Playlists = [vm.Playlists[index]];
+            if (vm.PlaySelInfo < 1) {
+                showModal("Click Playlist again to change selection");
+                vm.PlaySelInfo = 1;
+            }
+            $.ajax({
+                url: "http://localhost:49411/Home/GetTracks?tracksUrl=" + trackurl,
+                type: 'GET',
+                dataType: 'json',
+                error: function (xhr) {
+                    alert(xhr.statusText);
+                },
+                success: function (result) {
+                    vm.Tracks = result;
+                    vm.ShowTracks = true;
+                }
+            });
+        };
+
+        function getPlaylists(id, index) {
+            vm.Categories = [vm.Categories[index]];
+            if (vm.CatSelInfo < 1) {
+                showModal("Click Category again to change selection");
+                vm.CatSelInfo = 1;
+            }
+            $.ajax({
+                url: "http://localhost:49411/Home/GetPlaylists?category=" + id,
+                type: 'GET',
+                dataType: 'json',
+                error: function (xhr) {
+                    alert(xhr.statusText);
+                },
+                success: function (result) {
+                    vm.Playlists = result;
+                    vm.ShowPlaylists = true;
+                }
+            });
+        };
+
+        function addArtist(artist) {
+            if (vm.Seeds < 5) {
+                vm.SelectedArtists.push(artist);
+                vm.Seeds = vm.Seeds + 1;
+            } else {
+                warnSeedFull();
+            }
+        }
+
+        function addTrack(track) {
+            if (vm.Seeds < 5) {
+                vm.SelectedTracks.push(track);
+                vm.Seeds = vm.Seeds + 1;
+            } else {
+                warnSeedFull();
+            }
+        }
+
+        function removeTrack(track) {
+            vm.Seeds = vm.Seeds - 1;
+            var trackIndex = vm.SelectedTracks.findIndex(function (a) { return a.Id == track.Id });
+            vm.SelectedTracks.pop(trackIndex);
+        }
+
+
+        function removeArtist(artist) {
+            vm.Seeds = vm.Seeds - 1;
+            var artistIndex = vm.SelectedArtists.findIndex(function (a) { return a.Id == artist.Id });
+            vm.SelectedArtists.pop();
+        }
+
+        function showModal(text) {
+            vm.InfoText = text;
+            vm.ShowModal = true;
+        }
+
+        function warnSeedFull() {
+            showModal("Maximum number of influences reached");
+        }
+        var categoryList = {
+            template: '#CategoryList',
+            props: {
+                Array: {}
+            },
+            methods: {
+                GetPlaylists: function (id, index) {
+                    if (vm.CategorySelected) {
+                        getCategories();
+                        vm.CategorySelected = vm.CategorySelected === true ? false : true;
+                        vm.PlaylistSelected = vm.PlaylistSelected === true ? false : true;
+                        return;
+                    }
+                    vm.CategorySelected = vm.CategorySelected === true ? false : true;
+                    getPlaylists(id, index);
+                }
+            }
+        };
+
+        var playlistList = {
+            template: '#PlaylistList',
+            props: {
+                Array: {}
+            },
+            methods: {
+                GetTracksForPlaylist: function (id, index) {
+                    if (vm.PlaylistSelected) {
+                        getPlaylists(vm.Categories[0].Id, 0);
+                        vm.PlaylistSelected = vm.PlaylistSelected === true ? false : true;
+                        return;
+                    }
+                    vm.PlaylistSelected = vm.PlaylistSelected === true ? false : true;
+                    getTracksForPlaylist(id, index);
+                }
+            }
+        };
+
+        var tracksList = {
+            template: '#TracksList',
+            props: {
+                Array: {}
+            },
+            methods: {
+                AddArtist: function (artist) {
+                    addArtist(artist);
+                },
+                AddTrack: function (track) {
+                    addTrack(track);
+                }
+            }
+        };
+
+        var modal = {
+            template: "#Modal",
+            props: {
+                Text: ""
+            },
+            methods: {
+                Close: function () {
+                    vm.ShowModal = false;
+                }
+            }
+        };
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                CatSelInfo: 0,
+                PlaySelInfo: 0,
+                ShowModal: false,
+                InfoText: "",
+                CategorySelected: false,
+                PlaylistSelected: false,
+                ShowCategories: true,
+                ShowPlaylists: false,
+                ShowTracks: false,
+                Seeds: 0,
+                SelectedArtists: [],
+                SelectedTracks: [],
+                Categories: null,
+                Tracks: null,
+                Playlists: null
+            },
+            methods: {
+                Recommend: recommend,
+                RemoveArtist: removeArtist,
+                RemoveTrack: removeTrack
+            },
+            components: {
+                'modal': modal,
+                'categorylist': categoryList,
+                'playlistlist': playlistList,
+                'trackslist': tracksList
+            }
+        });
+        getCategories();
+    </script>
+
+}

@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1904B01E-2A48-4589-A2C0-CA2D216DA9C0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Arbetsprov.CN.Integrations.Spotify</RootNamespace>
+    <AssemblyName>Arbetsprov.CN.Integrations.Spotify</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\SpotifyPagingObject.cs" />
+    <Compile Include="Models\SpotifyPlaylistsResponse.cs" />
+    <Compile Include="Models\SpotifySeedObject.cs" />
+    <Compile Include="Models\SpotifySeedRecommendResponse.cs" />
+    <Compile Include="Models\SpotifyTrackFeatures.cs" />
+    <Compile Include="Models\SpotifyPlaylistTracksObject.cs" />
+    <Compile Include="Models\SpotifyTracksAnalysisResponse.cs" />
+    <Compile Include="Models\SpotifyTracksResponse.cs" />
+    <Compile Include="Models\SpotifyUser.cs" />
+    <Compile Include="Models\SpotifyAlbum.cs" />
+    <Compile Include="Models\SpotifyArtist.cs" />
+    <Compile Include="Models\SpotifyAuthResponse.cs" />
+    <Compile Include="Models\SpotifyCategoriesResponse.cs" />
+    <Compile Include="Models\SpotifyCategory.cs" />
+    <Compile Include="Models\SpotifyExternalIds.cs" />
+    <Compile Include="Models\SpotifyExternalUrls.cs" />
+    <Compile Include="Models\SpotifyImage.cs" />
+    <Compile Include="Models\SpotifyPlaylist.cs" />
+    <Compile Include="Models\SpotifyPlaylistTrack.cs" />
+    <Compile Include="Models\SpotifyTrack.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Spotify.cs" />
+    <Compile Include="SpotifyToken.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Arbetsprov.CN.Integrations.Generic\Arbetsprov.CN.Integrations.Generic.csproj">
+      <Project>{EA5846EF-B4CC-4EBC-B06A-41335DC7DAD3}</Project>
+      <Name>Arbetsprov.CN.Integrations.Generic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
