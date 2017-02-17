@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using Arbetsprov.CN.BLL.Factories;
-using Arbetsprov.CN.Integrations.Generic;
+﻿using Arbetsprov.CN.BLL.Factories;
 using Arbetsprov.CN.Integrations.Spotify;
 using Arbetsprov.CN.Integrations.Spotify.Models;
 using System.Collections.Generic;
